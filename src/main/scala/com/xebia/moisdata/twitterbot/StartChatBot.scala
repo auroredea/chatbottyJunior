@@ -1,9 +1,8 @@
 package com.xebia.moisdata.twitterbot
 
-import com.danielasfregola.twitter4s.{TwitterRestClient, TwitterStreamingClient}
 import com.danielasfregola.twitter4s.entities.Tweet
-import com.danielasfregola.twitter4s.entities.enums.Language
 import com.danielasfregola.twitter4s.entities.streaming.StreamingMessage
+import com.danielasfregola.twitter4s.{TwitterRestClient, TwitterStreamingClient}
 import com.typesafe.config.ConfigFactory
 import dispatch._
 import org.slf4j.LoggerFactory
