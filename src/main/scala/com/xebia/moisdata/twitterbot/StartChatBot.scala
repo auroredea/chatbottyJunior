@@ -26,11 +26,10 @@ object StartChatBot extends App {
   val client = TwitterStreamingClient()
   val answerClient = TwitterRestClient()
 
-//  val chatBotId = "858700261468123136"
   val chatbotName = "chatbotty"
   val hashTag = "atestwhitchatbotty"
 
-  val stream = client.filterStatuses(tracks = Seq(hashTag,chatbotName), languages = Seq(Language.English))(answerToTweet)
+  val stream = client.filterStatuses(tracks = Seq(hashTag,chatbotName))(answerToTweet)
 
   private def answerToTweet: PartialFunction[StreamingMessage, Unit] = {
     case tweet: Tweet =>
