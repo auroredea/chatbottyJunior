@@ -26,9 +26,9 @@ object StartChatBot extends App {
   val answerClient = TwitterRestClient()
 
   val chatbotName = "chatbotty"
-  val hashTag = "atestwhitchatbotty"
+  val hashTag = "lemoisdeladata"
 
-  val stream = client.filterStatuses(tracks = Seq(hashTag,chatbotName))(answerToTweet)
+  val stream = client.filterStatuses(tracks = Seq(chatbotName))(answerToTweet)
 
   private def answerToTweet: PartialFunction[StreamingMessage, Unit] = {
     case tweet: Tweet =>
@@ -37,14 +37,28 @@ object StartChatBot extends App {
 
       log.info(s"performing request to ${pythonHostTfidf.toRequest.getUrl} with JSON body ${Json.stringify(messageJson)}")
 
-      val request = Http(pythonHostTfidf
+      val reqTFIDF = Http(pythonHostTfidf
         .addHeader("Content-Type", "application/json")
         .setBodyEncoding("UTF-8")
         .setBody(Json.stringify(messageJson))
         .POST
       )
 
-      request.map { response =>
+      reqTFIDF.map { response =>
+        val cleanedAnswer = cleanAnswer(response.getResponseBody)
+
+        log.info(s"chatbot answering $cleanedAnswer")
+        answerClient.createTweet(status = s"@$userName ".concat(cleanedAnswer), in_reply_to_status_id = Some(tweet.id))
+      }
+
+      val reqRNN = Http(pythonHostRNN
+        .addHeader("Content-Type", "application/json")
+        .setBodyEncoding("UTF-8")
+        .setBody(Json.stringify(messageJson))
+        .POST
+      )
+
+      reqRNN.map { response =>
         val cleanedAnswer = cleanAnswer(response.getResponseBody)
 
         log.info(s"chatbot answering $cleanedAnswer")
