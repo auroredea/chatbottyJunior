@@ -12,12 +12,9 @@ app = Flask(__name__)
 @app.route('/rnn', methods=['POST'])
 def rnn():
     requestBody = request.json
-
-    #context = requestBody["context"]
     question = requestBody["question"]
     print("rnn is called ")
-    questionSeq = []  # Will be contain the question as seen by the encoder
-    answer = rnnmodel.predict(context)
+    answer = rnnmodel.predict(question)
 
     return answer
 
@@ -26,12 +23,12 @@ def tfidf():
     requestBody = request.json
 
     context = requestBody["context"]
-    # question = requestBody["question"]
     before = datetime.datetime.now()
     response = tfidfmodel.predict(context)
     after = datetime.datetime.now()
     delta = after - before
     print("Response time :" + str(delta))
+    
     return response
 
 if __name__ == '__main__':
