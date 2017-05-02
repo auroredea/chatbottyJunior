@@ -13,8 +13,8 @@ app = Flask(__name__)
 def rnn():
     requestBody = request.json
 
-    context = requestBody["context"]
-    # question = requestBody["question"]
+    #context = requestBody["context"]
+    question = requestBody["question"]
     print("rnn is called ")
     questionSeq = []  # Will be contain the question as seen by the encoder
     answer = rnnmodel.predict(context)

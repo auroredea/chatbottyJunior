@@ -8,3 +8,5 @@
 *.swo
 *.swp
 .sbtserver/
+*/__pycache__
+*.pyc
