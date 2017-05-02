@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import cluster
-from sklearn.pipeline import make_pipeline
 from sklearn.externals import joblib
 
 
@@ -22,10 +20,10 @@ class TFIDFPredictor:
         self._train_df = pd.read_csv(path)
         self._train_df.Label = self._train_df.Label.astype('category')
 
-    def train(self):
+    def train(self, kmeans_model_path):
         self._vectorizer.fit(np.append(self._train_df.Context.values, self._train_df.Utterance.values))
         self._utterances = self._train_df[self._train_df['Label'] == 1.0].reset_index()
-        self._pipelinemodel = joblib.load('../../../model/kmeans_pipeline.pkl')
+        self._pipelinemodel = joblib.load(kmeans_model_path + "/kmeans_pipeline.pkl")
         context_clust = self._pipelinemodel.predict(self._utterances.Context.values)
         context_clust = pd.DataFrame(context_clust, columns=["cluster"])
         self._utterances = pd.concat([self._utterances, context_clust], axis=1)
