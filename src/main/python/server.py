@@ -28,7 +28,7 @@ def tfidf():
     after = datetime.datetime.now()
     delta = after - before
     print("Response time :" + str(delta))
-    
+
     return response
 
 if __name__ == '__main__':

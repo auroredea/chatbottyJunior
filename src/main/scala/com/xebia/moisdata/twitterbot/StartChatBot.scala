@@ -37,20 +37,6 @@ object StartChatBot extends App {
 
       log.info(s"performing request to ${pythonHostTfidf.toRequest.getUrl} with JSON body ${Json.stringify(messageJson)}")
 
-      val reqTFIDF = Http(pythonHostTfidf
-        .addHeader("Content-Type", "application/json")
-        .setBodyEncoding("UTF-8")
-        .setBody(Json.stringify(messageJson))
-        .POST
-      )
-
-      reqTFIDF.map { response =>
-        val cleanedAnswer = cleanAnswer(response.getResponseBody)
-
-        log.info(s"chatbot answering $cleanedAnswer")
-        answerClient.createTweet(status = s"@$userName ".concat(cleanedAnswer), in_reply_to_status_id = Some(tweet.id))
-      }
-
       val reqRNN = Http(pythonHostRNN
         .addHeader("Content-Type", "application/json")
         .setBodyEncoding("UTF-8")
@@ -83,7 +69,7 @@ object StartChatBot extends App {
   }
 
   private def cleanAnswer(response: String): String = {
-    response.replace("__eou__", "").replace("__eot__", "")
+    response.replace("__eou__", "").replace("__eot__", "").concat(s" #$hashTag")
   }
 }
 
